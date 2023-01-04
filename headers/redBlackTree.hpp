@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 09:07:25 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/04 15:12:13 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/04 15:17:51 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class	redBlackTree
 			}
 			while (tmp)
 			{
-				if (value > tmp->value)
+				if (value > tmp->key)
 				{
 					if (!tmp->right)
 					{
