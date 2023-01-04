@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 09:07:25 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/04 19:58:01 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/04 19:59:28 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class	redBlackTree
 		redBlackTree	*right;
 	public:
 		redBlackTree():key(), value(), right(nullptr), left(nullptr), parent(NULL), red(true) {};
-		redBlackTree(K key, V value, bool red):key(key), value(value), parent(NULL), right(NULL), left(NULL), red(red) {};
+		redBlackTree(K key, V value, bool red, redBlackTree *parent):key(key), value(value), parent(parent), right(NULL), left(NULL), red(red) {};
 		//this function is used to insert data as BST for now
 		void	insert(K key, V value)
 		{
@@ -47,8 +47,7 @@ class	redBlackTree
 				{
 					if (!tmp->right)
 					{
-						tmp->parent = this;
-						tmp->right = new redBlackTree(key, value, true);
+						tmp->right = new redBlackTree(key, value, true, this);
 						break;
 					}
 					/*else
@@ -72,7 +71,7 @@ class	redBlackTree
 					if (!tmp->left)
 					{
 						tmp->parent = this;
-						tmp->left = new redBlackTree(key, value, true);
+						tmp->left = new redBlackTree(key, value, true, this);
 						break;
 					}
 					/*else
