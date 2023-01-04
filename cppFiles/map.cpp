@@ -6,14 +6,8 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 09:37:01 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/04 09:43:34 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/04 13:43:56 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/map.hpp"
-
-template <typename K, typename V>
-void	map<K, V>::get()
-{
-	
-}
