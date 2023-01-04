@@ -1,19 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map.cpp                                            :+:      :+:    :+:   */
+/*   redBlackTree.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/03 09:37:01 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/04 09:43:34 by aer-razk         ###   ########.fr       */
+/*   Created: 2023/01/04 09:52:41 by aer-razk          #+#    #+#             */
+/*   Updated: 2023/01/04 09:57:11 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/map.hpp"
+#include "../headers/redBlackTree.hpp"
 
-template <typename K, typename V>
-void	map<K, V>::get()
+template <class T, typename V>
+redBlackTree<T, V>::redBlackTree(V value):value(value), right(nullptr), left(nullptr)
 {
-	
+	if (size == 0)
+		red = false;
+	else
+		red = true;
+	size++;
 }
+
+template <class T, typename V>
+void	redBlackTree<T, V>::insert()

@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 09:32:11 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/03 09:38:54 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/03 09:53:42 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,4 +15,5 @@
 #include	<iostream>
 #include	<string>
 #include	<fstream>
+#include	<vector>
 #endif
