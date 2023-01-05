@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 09:07:25 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/05 00:13:03 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/05 16:59:20 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ class	redBlackTree
 
 			Node(K key, V value, bool red, Node *parent) :
 				key(key), value(value), red(red), left(nullptr), right(nullptr), parent(parent) {}
+			bool isLeftChild()
+			{
+				return (this == parent->left);
+			}
 		};
 		Node	*root;
 	public:
@@ -46,8 +50,8 @@ class	redBlackTree
 					if (!tmp->right)
 					{
 						tmp->right = new Node(key, value, true, tmp);
-						std::cout << "right insertion\n";
-						rotateAndRecolor(tmp->right);
+						rotateAndRecolor(tmp->right);//this is the function where i rotate and recolor so i can turn this BST INTO RBT
+						root->red = false;
 						break;
 					}
 					tmp = tmp->right;
@@ -57,8 +61,8 @@ class	redBlackTree
 					if (!tmp->left)
 					{
 						tmp->left = new Node(key, value, true, tmp);
-						std::cout << "left insertion\n";
-						rotateAndRecolor(tmp->left);
+						rotateAndRecolor(tmp->left);//this is the function where i rotate and recolor so i can turn this BST INTO RBT
+						root->red = false;
 						break;
 					}
 					tmp = tmp->left;
@@ -72,33 +76,53 @@ class	redBlackTree
 			if (tmp_node != root && parent->red)
 			{
 				Node *grandParent = parent->parent;
-				Node *uncle = (parent == grandParent->left) ? grandParent->right : grandParent->left;
+				Node *uncle = (parent->isLeftChild()) ? grandParent->right : grandParent->left;
 				if (uncle && uncle->red)
 				{
 					changeColor(parent);
-					changeColor(uncle);	
+					changeColor(uncle);
 					changeColor(grandParent);
 					rotateAndRecolor(grandParent);
 				}
-				else if (parent == grandParent->left)
+				else if (!uncle || !uncle->red)
 				{
-					if (tmp_node != parent->left)
+					if (!tmp_node->isLeftChild() && !parent->isLeftChild())
+					{
+						changeColor(parent);
+						changeColor(grandParent);
+						rotateLeft(grandParent);
+					}
+					else if (!tmp_node->isLeftChild() && parent->isLeftChild())
+					{
+						changeColor(tmp_node);
+						changeColor(grandParent);
 						rotateLeft(parent);
-					changeColor(parent);
-					changeColor(grandParent); 
-					rotateRight(grandParent);
-					rotateAndRecolor((tmp_node == parent->left) ? parent : grandParent);
-				}
-				else if (parent != grandParent->left)
-				{
-					if (tmp_node == parent->left)
+						rotateRight(grandParent);
+					}
+					else if ((tmp_node->isLeftChild() && !parent->isLeftChild()))
+					{
+						changeColor(tmp_node);
+						changeColor(grandParent);
 						rotateRight(parent);
-					changeColor(parent);
-					changeColor(grandParent);
-					rotateLeft(grandParent);
-					rotateAndRecolor((tmp_node == parent->left) ? grandParent : parent);
+						rotateLeft(grandParent);
+					}
+					else if (tmp_node->isLeftChild() && parent->isLeftChild())
+					{
+						changeColor(parent);
+						changeColor(grandParent);
+						rotateRight(grandParent);
+					}
 				}
 			}
+		}
+
+		void printTree(Node *root, int level) {
+			if (root == NULL) return;
+
+			printTree(root->right, level + 1);
+			for (int i = 0; i < level; i++) std::cout << "   ";
+			std::cout << root->key << (root->red ? " (red)" : " (black)") << std::endl;
+			printTree(root->left, level + 1);
 		}
 		
 		void	rotateLeft(Node *tmp_node)
@@ -111,7 +135,7 @@ class	redBlackTree
 			rightNode->parent = tmp_node->parent;
 			if (!tmp_node->parent)
 				root = rightNode;
-			else if (tmp_node->parent->left == tmp_node)
+			else if (tmp_node->isLeftChild())
 				tmp_node->parent->left = rightNode;
 			else
 				tmp_node->parent->right = rightNode;
@@ -128,7 +152,7 @@ class	redBlackTree
 			leftNode->parent = tmp_node->parent;
 			if (!tmp_node->parent)
 				root = leftNode;
-			else if (tmp_node->parent->left == tmp_node)
+			else if (tmp_node->isLeftChild())
 				tmp_node->parent->left = leftNode;
 			else
 				tmp_node->parent->right = leftNode;
@@ -137,14 +161,12 @@ class	redBlackTree
 		//this function just to test the insertion
 		void	printFirstNode()
 		{
-			std::cout << "root:" << this->root->key << "| red?:" << this->root->red << std::endl;
-			//std::cout << "root:" << this->root->right->key << "| red?:" << this->root->right->red << std::endl;
+			printTree(root, 0);
 		}
 		//this function to change the color of a node;
 		void	changeColor(Node *node)
 		{
-			if (node != root)
-				node->red? node->red = false : node->red = true;
+			node->red? node->red = false : node->red = true;
 		}
 };
 
