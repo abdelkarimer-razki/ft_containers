@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 09:36:52 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/04 15:34:23 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/06 14:21:27 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,20 @@ namespace ft
 			//modifiers
 			void	insert(std::pair<K, V> data)
 			{
-				this->redBlack.insert(data.first, data.second);
+				this->redBlack.insertNode(data.first, data.second);
 			}
 			void	getFirstNode()
 			{
 				this->redBlack.printFirstNode();
+			}
+			V	at(K key)
+			{
+				return this->redBlack.findNode(key);
+			}
+
+			void	erase(K key)
+			{
+				this->redBlack.deleteNode(key);
 			}
 	};
 }

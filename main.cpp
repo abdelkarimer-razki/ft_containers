@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 09:32:57 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/05 16:53:39 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/06 13:16:42 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,11 @@ int main()
 	karim.insert(std::pair<int, std::string>(2, "eighteen"));
 	karim.insert(std::pair<int, std::string>(1, "eighteen"));
 	karim.insert(std::pair<int, std::string>(70, "eighteen"));
-
-
-
 	karim.getFirstNode();
+	karim.erase(16);
+	std::cout << "=======after erase========\n";
+	karim.getFirstNode();
+while(1);
+
+
 }
