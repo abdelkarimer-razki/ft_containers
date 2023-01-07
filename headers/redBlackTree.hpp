@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 09:07:25 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/07 09:46:43 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/07 09:49:29 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,7 +294,6 @@ class	redBlackTree
 						}
 					}
 					delete tmp;
-					std::cout << nodeBrother->key << std::endl;
 					/*if (!nodeToFixFrom && !red)
 						deleteRotateAndRecolor(nodeBrother);
 					else if (!nodeToFixFrom->red && !red)
