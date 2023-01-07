@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 09:07:25 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/07 10:05:26 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/07 12:45:28 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ class	redBlackTree
 			bool isLeftChild()
 			{
 				return (this == parent->left);
+			}
+			void changeToColor(bool red)
+			{
+				this->red = red;
 			}
 		};
 		Node	*root;
@@ -202,6 +206,8 @@ class	redBlackTree
 
 		void	transplantNode(Node *nodeToDelete, Node *nodeToTakePlace)
 		{
+			if (nodeToDelete == nodeToTakePlace)
+				return ;
 			if (nodeToDelete == root)
 				root = nodeToTakePlace;	
 			else if (nodeToDelete->isLeftChild())
@@ -228,28 +234,92 @@ class	redBlackTree
 			}
 		}
 
-		void	deleteRotateAndRecolor(Node *brother)
+		/*void	deleteRotateAndRecolor(Node *brother, bool isNodeToTakePlaceBlack)
 		{
-			if (brother->red)
+			if (!isNodeToTakePlaceBlack && brother->parent->red
+				&& (!brother->left || !brother->left->red)
+				&& (!brother->right || !brother->right->red))//case 4
 			{
 				changeColor(brother);
-				changeColor(brother->left);
+				changeColor(brother->parent);
+			}
+			else if (!brother->red && brother->right->red)// case 6
+			{
+				brother->changeToColor(brother->parent->red);
+				brother->parent->changeToColor(false);
+				brother->right->changeToColor(false);
 				rotateLeft(brother->parent);
 			}
-			else if ((!brother->left || !brother->left->red) && (!brother->right || !brother->right->red))
+			else if (!brother->red && !brother->parent->red
+				&& ((!brother->right || !brother->right->red)
+				&& (!brother->left || !brother->left->red)))// case 3
 			{
-				
+				changeColor(brother);
+				if (brother->parent->isLeftChild())//case 3 trying to call case5
+					deleteRotateAndRecolor(brother->parent->parent->right, brother->parent->red);
+				else
+					deleteRotateAndRecolor(brother->parent->parent->left, brother->parent->red);
 			}
-			else if ((brother->left && brother->left->red) && (!brother->right || !brother->right->red))
+
+			else if (!brother->red && brother->left
+				&& brother->left->red
+				&& (!brother->right || !brother->right->red)
+				&& !brother->parent->red)// case 5
 			{
-				
+				changeColor(brother->left);
+				changeColor(brother);
+				rotateRight(brother);
+				deleteRotateAndRecolor(brother, false); //calling case 6
 			}
-			else if (brother->right && brother->right->red)
+			else if (brother->red && (!brother->left || !brother->left->red)
+				&& (!brother->right || !brother->right->red)
+				&& !brother->parent->red)//case 2
 			{
-				if (brother->left)
-					changeColor(brother->left);
-				rotateRight(brother->parent);
+				changeColor(brother);
+				rotateLeft(brother->parent);
+				if (brother->left->right)
+					brother->left->right->red = true;
 			}
+		}*/
+
+		bool isBlackNode(Node *node)
+		{
+			return (!node || !node->red);
+		}
+
+		void	deleteRotateAndRecolor(Node *brother)
+		{
+			Node *parent = brother->parent;
+			/*if (parent == root)
+				return ;*/
+			if (brother->red)
+			{
+				if (brother->isLeftChild())
+					rotateRight(parent);
+				else 
+					rotateLeft(parent);
+			}
+			else if (isBlackNode(brother)
+				&& isBlackNode(brother->left)
+				&& isBlackNode(brother->right))
+			{
+				changeColor(brother);
+				if (parent->isLeftChild())
+					deleteRotateAndRecolor(parent->parent->right);
+				else if (!brother->parent->isLeftChild())
+					deleteRotateAndRecolor(parent->parent->left);
+			}
+			else if (isBlackNode(brother)
+				&& isBlackNode(brother->right)
+				&& !isBlackNode(brother->left) )
+			{
+				rotateRight(brother);
+				rotateLeft(parent);
+			}
+			else if (isBlackNode(brother)
+				&& !isBlackNode(brother->right))
+				rotateLeft(parent);
+			
 		}
 
 		void	deleteNode(K key)
@@ -257,7 +327,7 @@ class	redBlackTree
 			Node	*tmp = root;
 			Node	*nodeToFixFrom;
 			Node	*nodeBrother;
-			bool	red;
+			bool	isNodeToTakePlaceBlack, isNodeToDelete;
 			while (tmp)
 			{
 				if (key > tmp->key)
@@ -275,7 +345,7 @@ class	redBlackTree
 				else if (key == tmp->key)
 				{
 					Node *tmpLoop = tmp;
-					red = tmp->red;
+					isNodeToDelete = tmp->red;
 					while (tmpLoop)
 					{
 						if (tmpLoop->left && tmp == tmpLoop)
@@ -285,18 +355,28 @@ class	redBlackTree
 						else
 						{
 							nodeToFixFrom = tmpLoop->left;
-							nodeBrother = tmpLoop->parent->left;
+							if (!nodeToFixFrom)
+								isNodeToTakePlaceBlack = false;
+							else if (nodeToFixFrom->red)
+								isNodeToTakePlaceBlack = true;
+							else
+								isNodeToTakePlaceBlack = false;
+							if (tmpLoop->isLeftChild()) 
+								nodeBrother = tmpLoop->parent->right;
+							else
+								nodeBrother = tmpLoop->parent->left;
 							transplantNode(tmpLoop, nodeToFixFrom);
 							transplantNode(tmp, tmpLoop);
-							printDebug();
 							break ;
 						}
 					}
 					delete tmp;
-					/*if (!nodeToFixFrom && !red)
+					/*std::cout << "hey:" << nodeBrother->key << std::endl;
+					printDebug();*/
+					if (isNodeToTakePlaceBlack)
+						changeColor(nodeToFixFrom);
+					else if (!isNodeToDelete)
 						deleteRotateAndRecolor(nodeBrother);
-					else if (!nodeToFixFrom->red && !red)
-						deleteRotateAndRecolor(nodeBrother);*/
 					break ;
 				}
 			}

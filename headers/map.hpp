@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 09:36:52 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/06 14:21:27 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/07 10:14:04 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ namespace ft
 			}
 			void	getFirstNode()
 			{
-				this->redBlack.printFirstNode();
+				this->redBlack.printDebug();
 			}
 			V	at(K key)
 			{
