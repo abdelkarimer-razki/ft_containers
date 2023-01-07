@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 09:07:25 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/07 09:49:29 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/07 10:05:26 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,9 +166,10 @@ class	redBlackTree
 			tmp_node->parent = leftNode;
 		}
 		//this function just to test the insertion
-		void	printFirstNode()
+		void	printDebug()
 		{
 			printTree(root, "", true);
+			while (1);
 		}
 		//this function to change the color of a node;
 		void	changeColor(Node *node)
@@ -210,13 +211,13 @@ class	redBlackTree
 			if (nodeToTakePlace)
 			{
 				nodeToTakePlace->right = NULL;
-				if (nodeToDelete->right)
+				if (nodeToDelete->right &&  nodeToDelete->right != nodeToTakePlace)
 				{
 					nodeToDelete->right->parent = nodeToTakePlace;
 					nodeToTakePlace->right = nodeToDelete->right;	
 				}
 				nodeToTakePlace->left = NULL;
-				if (nodeToDelete->left)
+				if (nodeToDelete->left && nodeToDelete->left != nodeToTakePlace)
 				{
 					nodeToDelete->left->parent = nodeToTakePlace;
 					nodeToTakePlace->left = nodeToDelete->left;
@@ -277,19 +278,17 @@ class	redBlackTree
 					red = tmp->red;
 					while (tmpLoop)
 					{
-						if ((tmpLoop->left && tmp == tmpLoop) || (tmpLoop->left && !tmpLoop->right))
+						if (tmpLoop->left && tmp == tmpLoop)
 							tmpLoop = tmpLoop->left;
 						else if (tmpLoop->right)
 							tmpLoop = tmpLoop->right;
 						else
 						{
 							nodeToFixFrom = tmpLoop->left;
-							if (tmpLoop->isLeftChild())
-								nodeBrother = tmpLoop->parent->right;
-							else
-								nodeBrother = tmpLoop->parent->left;
-							transplantNode(tmpLoop, tmpLoop->left);
+							nodeBrother = tmpLoop->parent->left;
+							transplantNode(tmpLoop, nodeToFixFrom);
 							transplantNode(tmp, tmpLoop);
+							printDebug();
 							break ;
 						}
 					}
