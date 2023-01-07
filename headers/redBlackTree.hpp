@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 09:07:25 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/07 13:08:58 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/07 15:35:16 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,12 @@ class	redBlackTree
 		//this function to change the color of a node;
 		void	changeColor(Node *node)
 		{
-			node->red? node->red = false : node->red = true;
+			if (!node)
+				return ;
+			if (node->red == true)
+				node->red = false;
+			else
+				node->red = true;
 		}
 
 		V	findNode(K key)
@@ -229,57 +234,10 @@ class	redBlackTree
 				}
 				nodeToTakePlace->parent = nodeToDelete->parent;
 				if (nodeToTakePlace->red)
-					changeColor(nodeToTakePlace);
+					nodeToTakePlace->changeToColor(false);
 			}
 		}
 
-		/*void	deleteRotateAndRecolor(Node *brother, bool isNodeToTakePlaceBlack)
-		{
-			if (!isNodeToTakePlaceBlack && brother->parent->red
-				&& (!brother->left || !brother->left->red)
-				&& (!brother->right || !brother->right->red))//case 4
-			{
-				changeColor(brother);
-				changeColor(brother->parent);
-			}
-			else if (!brother->red && brother->right->red)// case 6
-			{
-				brother->changeToColor(brother->parent->red);
-				brother->parent->changeToColor(false);
-				brother->right->changeToColor(false);
-				rotateLeft(brother->parent);
-			}
-			else if (!brother->red && !brother->parent->red
-				&& ((!brother->right || !brother->right->red)
-				&& (!brother->left || !brother->left->red)))// case 3
-			{
-				changeColor(brother);
-				if (brother->parent->isLeftChild())//case 3 trying to call case5
-					deleteRotateAndRecolor(brother->parent->parent->right, brother->parent->red);
-				else
-					deleteRotateAndRecolor(brother->parent->parent->left, brother->parent->red);
-			}
-
-			else if (!brother->red && brother->left
-				&& brother->left->red
-				&& (!brother->right || !brother->right->red)
-				&& !brother->parent->red)// case 5
-			{
-				changeColor(brother->left);
-				changeColor(brother);
-				rotateRight(brother);
-				deleteRotateAndRecolor(brother, false); //calling case 6
-			}
-			else if (brother->red && (!brother->left || !brother->left->red)
-				&& (!brother->right || !brother->right->red)
-				&& !brother->parent->red)//case 2
-			{
-				changeColor(brother);
-				rotateLeft(brother->parent);
-				if (brother->left->right)
-					brother->left->right->red = true;
-			}
-		}*/
 
 		bool isBlackNode(Node *node)
 		{
@@ -292,8 +250,8 @@ class	redBlackTree
 			if (parent == root)
 				return ;
 			if (isBlackNode(parent) && brother->red) {
-				changeColor(brother);  // Change the color of the sibling to black
-				return;  // No further action is needed
+				brother->changeToColor(false);
+				return; 
 			}
 			if (brother->red)
 			{
@@ -306,7 +264,7 @@ class	redBlackTree
 				&& isBlackNode(brother->left)
 				&& isBlackNode(brother->right))
 			{
-				changeColor(brother);
+				brother->changeToColor(true);
 				if (isBlackNode(parent))
 				{					
 					if (parent->isLeftChild())
@@ -350,7 +308,6 @@ class	redBlackTree
 				else if (key == tmp->key)
 				{
 					Node *tmpLoop = tmp;
-					isNodeToDelete = tmp->red;
 					while (tmpLoop)
 					{
 						if (tmpLoop->left && tmp == tmpLoop)
@@ -360,6 +317,7 @@ class	redBlackTree
 						else
 						{
 							nodeToFixFrom = tmpLoop->left;
+							isNodeToDelete = tmpLoop->red;
 							if (!nodeToFixFrom)
 								isNodeToTakePlaceBlack = false;
 							else if (nodeToFixFrom->red)
@@ -376,8 +334,8 @@ class	redBlackTree
 						}
 					}
 					delete tmp;
-					if (isNodeToDelete)
-						changeColor(nodeToFixFrom);
+					if (!isNodeToDelete && isNodeToTakePlaceBlack)
+						nodeToFixFrom->changeToColor(false);
 					else if (!isNodeToDelete)
 						deleteRotateAndRecolor(nodeBrother);
 					break ;
