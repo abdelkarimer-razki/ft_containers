@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 09:07:25 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/06 14:23:55 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/07 09:46:43 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ class	redBlackTree
 					changeColor(parent);
 					changeColor(uncle);
 					changeColor(grandParent);
-					rotateAndRecolor(grandParent);
+					insertRotateAndRecolor(grandParent);
 				}
 				else if (!uncle || !uncle->red)
 				{
@@ -205,29 +205,58 @@ class	redBlackTree
 				root = nodeToTakePlace;	
 			else if (nodeToDelete->isLeftChild())
 				nodeToDelete->parent->left = nodeToTakePlace;
-			else if (!nodeToDelete->isLeftChild())
+			else
 				nodeToDelete->parent->right = nodeToTakePlace;
 			if (nodeToTakePlace)
 			{
-				nodeToTakePlace->right = nodeToDelete->right;
-				nodeToTakePlace->left = nodeToDelete->left;
+				nodeToTakePlace->right = NULL;
+				if (nodeToDelete->right)
+				{
+					nodeToDelete->right->parent = nodeToTakePlace;
+					nodeToTakePlace->right = nodeToDelete->right;	
+				}
+				nodeToTakePlace->left = NULL;
+				if (nodeToDelete->left)
+				{
+					nodeToDelete->left->parent = nodeToTakePlace;
+					nodeToTakePlace->left = nodeToDelete->left;
+				}
 				nodeToTakePlace->parent = nodeToDelete->parent;
+				if (nodeToTakePlace->red)
+					changeColor(nodeToTakePlace);
 			}
 		}
 
-		void	deleteRotateAndRecolor(Node *parentNode)
+		void	deleteRotateAndRecolor(Node *brother)
 		{
-			if (nodeToFixFrom && nodeToFixFrom->red)
+			if (brother->red)
 			{
-
+				changeColor(brother);
+				changeColor(brother->left);
+				rotateLeft(brother->parent);
 			}
-			else if (!nodeToFixFrom && )
+			else if ((!brother->left || !brother->left->red) && (!brother->right || !brother->right->red))
+			{
+				
+			}
+			else if ((brother->left && brother->left->red) && (!brother->right || !brother->right->red))
+			{
+				
+			}
+			else if (brother->right && brother->right->red)
+			{
+				if (brother->left)
+					changeColor(brother->left);
+				rotateRight(brother->parent);
+			}
 		}
 
 		void	deleteNode(K key)
 		{
 			Node	*tmp = root;
-			Node	*nodeToSearchFrom;
+			Node	*nodeToFixFrom;
+			Node	*nodeBrother;
+			bool	red;
 			while (tmp)
 			{
 				if (key > tmp->key)
@@ -242,38 +271,37 @@ class	redBlackTree
 						break ;
 					tmp = tmp->left;
 				}
-				else
+				else if (key == tmp->key)
 				{
-					if (!tmp->left)
-						transplantNode(tmp, tmp->right);
-					else if (!tmp->right)
-						transplantNode(tmp, tmp->left);
-					else if (tmp->right && tmp->left)
+					Node *tmpLoop = tmp;
+					red = tmp->red;
+					while (tmpLoop)
 					{
-						Node *tmpLoop = tmp;
-						while (tmpLoop)
+						if ((tmpLoop->left && tmp == tmpLoop) || (tmpLoop->left && !tmpLoop->right))
+							tmpLoop = tmpLoop->left;
+						else if (tmpLoop->right)
+							tmpLoop = tmpLoop->right;
+						else
 						{
-							if (tmpLoop == tmp)
-								tmpLoop = tmpLoop->left;
-							else if (tmpLoop->left)
-								tmpLoop = tmpLoop->right;
-							else if (tmpLoop->right)
-								tmpLoop = tmpLoop->left;
+							nodeToFixFrom = tmpLoop->left;
+							if (tmpLoop->isLeftChild())
+								nodeBrother = tmpLoop->parent->right;
 							else
-							{
-								nodeToSearchFrom = tmpLoop->left;
-								transplantNode(tmpLoop, tmpLoop->left);
-								transplantNode(tmp, tmpLoop);
-								break ;
-							}
+								nodeBrother = tmpLoop->parent->left;
+							transplantNode(tmpLoop, tmpLoop->left);
+							transplantNode(tmp, tmpLoop);
+							break ;
 						}
 					}
 					delete tmp;
+					std::cout << nodeBrother->key << std::endl;
+					/*if (!nodeToFixFrom && !red)
+						deleteRotateAndRecolor(nodeBrother);
+					else if (!nodeToFixFrom->red && !red)
+						deleteRotateAndRecolor(nodeBrother);*/
 					break ;
 				}
 			}
-			
-			//rotateAndRecolor(nodeToSearchFrom);
 		}
 };
 
