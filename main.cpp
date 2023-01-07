@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 09:32:57 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/07 12:46:55 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/07 12:48:13 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,22 @@ int main()
 	// karim.insert(std::pair<int, std::string>(28, "eighteen"));
 	// karim.erase(30);
 	//test3
-	// karim.insert(std::pair<int, std::string>(-10, "eighteen"));
-	// karim.insert(std::pair<int, std::string>(10, "eighteen"));
-	// karim.insert(std::pair<int, std::string>(30, "eighteen"));
-	// karim.insert(std::pair<int, std::string>(20, "eighteen"));
-	// karim.insert(std::pair<int, std::string>(38, "eighteen"));
-	// karim.erase(20);
-	karim.insert(std::pair<int, std::string>(10, "eighteen"));
-	karim.insert(std::pair<int, std::string>(40, "eighteen"));
 	karim.insert(std::pair<int, std::string>(-10, "eighteen"));
-	karim.insert(std::pair<int, std::string>(-20, "eighteen"));
-	karim.insert(std::pair<int, std::string>(-5, "eighteen"));
+	karim.insert(std::pair<int, std::string>(10, "eighteen"));
+	karim.insert(std::pair<int, std::string>(30, "eighteen"));
 	karim.insert(std::pair<int, std::string>(20, "eighteen"));
-	karim.insert(std::pair<int, std::string>(60, "eighteen"));
-	karim.insert(std::pair<int, std::string>(50, "eighteen"));
-	karim.insert(std::pair<int, std::string>(80, "eighteen"));
-	 karim.erase(40);
+	karim.insert(std::pair<int, std::string>(38, "eighteen"));
+	karim.erase(20);
+	// karim.insert(std::pair<int, std::string>(10, "eighteen"));
+	// karim.insert(std::pair<int, std::string>(40, "eighteen"));
+	// karim.insert(std::pair<int, std::string>(-10, "eighteen"));
+	// karim.insert(std::pair<int, std::string>(-20, "eighteen"));
+	// karim.insert(std::pair<int, std::string>(-5, "eighteen"));
+	// karim.insert(std::pair<int, std::string>(20, "eighteen"));
+	// karim.insert(std::pair<int, std::string>(60, "eighteen"));
+	// karim.insert(std::pair<int, std::string>(50, "eighteen"));
+	// karim.insert(std::pair<int, std::string>(80, "eighteen"));
+	//  karim.erase(40);
 	karim.getFirstNode();
 	std::cout << "=======after erase========\n";
 while(1);
