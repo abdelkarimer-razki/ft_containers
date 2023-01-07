@@ -6,7 +6,7 @@
 /*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 09:07:25 by aer-razk          #+#    #+#             */
-/*   Updated: 2023/01/07 12:45:28 by aer-razk         ###   ########.fr       */
+/*   Updated: 2023/01/07 13:08:58 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,6 @@ class	redBlackTree
 		void	printDebug()
 		{
 			printTree(root, "", true);
-			while (1);
 		}
 		//this function to change the color of a node;
 		void	changeColor(Node *node)
@@ -290,8 +289,12 @@ class	redBlackTree
 		void	deleteRotateAndRecolor(Node *brother)
 		{
 			Node *parent = brother->parent;
-			/*if (parent == root)
-				return ;*/
+			if (parent == root)
+				return ;
+			if (isBlackNode(parent) && brother->red) {
+				changeColor(brother);  // Change the color of the sibling to black
+				return;  // No further action is needed
+			}
 			if (brother->red)
 			{
 				if (brother->isLeftChild())
@@ -304,10 +307,13 @@ class	redBlackTree
 				&& isBlackNode(brother->right))
 			{
 				changeColor(brother);
-				if (parent->isLeftChild())
-					deleteRotateAndRecolor(parent->parent->right);
-				else if (!brother->parent->isLeftChild())
-					deleteRotateAndRecolor(parent->parent->left);
+				if (isBlackNode(parent))
+				{					
+					if (parent->isLeftChild())
+						return deleteRotateAndRecolor(parent->parent->right);
+					else if (!brother->parent->isLeftChild())
+						return deleteRotateAndRecolor(parent->parent->left);
+				}
 			}
 			else if (isBlackNode(brother)
 				&& isBlackNode(brother->right)
@@ -319,7 +325,6 @@ class	redBlackTree
 			else if (isBlackNode(brother)
 				&& !isBlackNode(brother->right))
 				rotateLeft(parent);
-			
 		}
 
 		void	deleteNode(K key)
@@ -371,9 +376,7 @@ class	redBlackTree
 						}
 					}
 					delete tmp;
-					/*std::cout << "hey:" << nodeBrother->key << std::endl;
-					printDebug();*/
-					if (isNodeToTakePlaceBlack)
+					if (isNodeToDelete)
 						changeColor(nodeToFixFrom);
 					else if (!isNodeToDelete)
 						deleteRotateAndRecolor(nodeBrother);
